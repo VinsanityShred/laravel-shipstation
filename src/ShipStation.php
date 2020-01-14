@@ -65,11 +65,7 @@ class ShipStation extends Client
      */
     public function get($options = [], $endpoint = '')
     {
-        $response = $this->request('GET', "{$this->endpoint}{$endpoint}", ['query' => $options]);
-
-        $this->sleepIfRateLimited($response);
-
-        return json_decode($response->getBody()->getContents());
+        return json_decode($this->request('GET', "{$this->endpoint}{$endpoint}", ['query' => $options])->getBody()->getContents());
     }
 
     /**
@@ -81,11 +77,7 @@ class ShipStation extends Client
      */
     public function post($options = [], $endpoint = '')
     {
-        $response = $this->request('POST', "{$this->endpoint}{$endpoint}", ['json' => $options]);
-
-        $this->sleepIfRateLimited($response);
-
-        return json_decode($response->getBody()->getContents());
+        return json_decode($this->request('POST', "{$this->endpoint}{$endpoint}", ['json' => $options])->getBody()->getContents());
     }
 
     /**
@@ -96,11 +88,7 @@ class ShipStation extends Client
      */
     public function delete($endpoint = '')
     {
-        $response = $this->request('DELETE', "{$this->endpoint}{$endpoint}");
-
-        $this->sleepIfRateLimited($response);
-
-        return json_decode($response->getBody()->getContents());
+        return json_decode($this->request('DELETE', "{$this->endpoint}{$endpoint}")->getBody()->getContents());
     }
 
     /**
@@ -112,26 +100,7 @@ class ShipStation extends Client
      */
     public function update($options = [], $endpoint = '')
     {
-        $response = $this->request('PUT', "{$this->endpoint}{$endpoint}", ['json' => $options]);
-
-        $this->sleepIfRateLimited($response);
-
-        return json_decode($response->getBody()->getContents());
-    }
-
-    /**
-     * Check to see if we are about to rate limit and pause if necessary.
-     *
-     * @param Response $response
-     */
-    public function sleepIfRateLimited(Response $response)
-    {
-        $rateLimit = (int)$response->getHeader('X-Rate-Limit-Remaining')[0];
-        $rateLimitWait = (int)$response->getHeader('X-Rate-Limit-Reset')[0];
-
-        if ($rateLimit === 0 || ($rateLimitWait / $rateLimit) > 1.5) {
-            sleep(1.5);
-        }
+        return json_decode($this->request('PUT', "{$this->endpoint}{$endpoint}", ['json' => $options])->getBody()->getContents());
     }
 
     /**

@@ -22,9 +22,7 @@ class Orders extends Endpoint
      */
     public function existsByOrderNumber($orderNumber)
     {
-        $orderId = $this->getOrderId($orderNumber);
-
-        return $orderId ? true : false;
+        return $this->getOrderId($orderNumber) ? true : false;
     }
 
     /**
