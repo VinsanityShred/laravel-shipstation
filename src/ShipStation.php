@@ -72,7 +72,7 @@ class ShipStation extends Client
 
     public function request($method, $uri = '', array $options = [])
     {
-        $response = parent::request();
+        $response = parent::request($method, $uri, $options);
 
         static::$rateLimitLimit = $response->getHeader('X-Rate-Limit-Limit')[0];
         static::$rateLimitReset = $response->getHeader('X-Rate-Limit-Reset')[0];
