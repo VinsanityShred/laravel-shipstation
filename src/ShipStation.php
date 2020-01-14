@@ -6,6 +6,20 @@ use GuzzleHttp\Psr7\Response;
 
 class ShipStation extends Client
 {
+    protected static $rateLimitLimit = null;
+    protected static $rateLimitRemaining = null;
+    protected static $rateLimitReset = null;
+
+    public static function rateLimited(): bool
+    {
+        return !is_null(static::$rateLimitRemaining) && (static::$rateLimitRemaining > 0);
+    }
+
+    public static function rateLimitReset(): int
+    {
+        return !is_null(static::$rateLimitReset) ? static::$rateLimitReset : 0;
+    }
+
     /**
      * @var string The current endpoint for the API. The default endpoint is /orders/
      */
@@ -54,6 +68,17 @@ class ShipStation extends Client
                 'Authorization' => 'Basic ' . base64_encode("{$apiKey}:{$apiSecret}"),
             ]
         ]);
+    }
+
+    public function request($method, $uri = '', array $options = [])
+    {
+        $response = parent::request();
+
+        static::$rateLimitLimit = $response->getHeader('X-Rate-Limit-Limit')[0];
+        static::$rateLimitReset = $response->getHeader('X-Rate-Limit-Reset')[0];
+        static::$rateLimitRemaining = $response->getHeader('X-Rate-Limit-Remaining')[0];
+
+        return $response;
     }
 
     /**
