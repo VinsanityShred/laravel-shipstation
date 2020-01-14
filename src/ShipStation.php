@@ -60,7 +60,7 @@ class ShipStation extends Client
             throw new \Exception('Your API key and/or private key are not set. Did you run artisan vendor:publish?');
         }
 
-        $this->base_uri = $apiURL;
+        $this->base_uri = $apiURL ?? $this->base_uri;
 
         parent::__construct([
             'base_uri' => $this->base_uri,
