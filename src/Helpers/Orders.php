@@ -22,7 +22,7 @@ class Orders extends Endpoint
      */
     public function existsByOrderNumber($orderNumber)
     {
-        return $this->getOrderId($orderNumber) ? true : false;
+        return (bool)$this->getOrderId($orderNumber);
     }
 
     /**
@@ -32,10 +32,6 @@ class Orders extends Endpoint
      */
     public function awaitingShipmentCount()
     {
-        $count = $this->get([
-            'orderStatus' => 'awaiting_shipment'
-        ]);
-
-        return isset($count->total) ? $count->total : null;
+        return ($this->get(['orderStatus' => 'awaiting_shipment']))->total ?? null;
     }
 }

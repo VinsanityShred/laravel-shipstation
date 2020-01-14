@@ -85,9 +85,7 @@ abstract class Endpoint
 
             $this->api->sleepIfRateLimited($response);
 
-            $data = json_decode($response->getBody()->getContents());
-
-            $orders = isset($data->orders) ? $data->orders : [];
+            $orders = (json_decode($response->getBody()->getContents()))->orders ?? [];
 
             foreach ($orders as $order) {
                 if ($order->orderNumber === $orderNumber) {
@@ -111,8 +109,6 @@ abstract class Endpoint
             'query' => ['orderNumber' => $orderNumber]
         ]);
 
-        $data = json_decode($response->getBody()->getContents());
-
-        return isset($data->pages) ? $data->pages : 0;
+        return (json_decode($response->getBody()->getContents()))->pages ?? 0;
     }
 }
