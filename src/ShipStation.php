@@ -74,9 +74,9 @@ class ShipStation extends Client
     {
         $response = parent::request($method, $uri, $options);
 
-        static::$rateLimitLimit = $response->getHeader('X-Rate-Limit-Limit')[0];
-        static::$rateLimitReset = $response->getHeader('X-Rate-Limit-Reset')[0];
-        static::$rateLimitRemaining = $response->getHeader('X-Rate-Limit-Remaining')[0];
+        static::$rateLimitLimit     = max((int)$response->getHeader('X-Rate-Limit-Limit')[0], 0);
+        static::$rateLimitReset     = max((int)$response->getHeader('X-Rate-Limit-Reset')[0], 0);
+        static::$rateLimitRemaining = max((int)$response->getHeader('X-Rate-Limit-Remaining')[0], 0);
 
         return $response;
     }
