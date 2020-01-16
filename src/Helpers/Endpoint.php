@@ -83,8 +83,6 @@ abstract class Endpoint
                 ]
             ]);
 
-            $this->api->sleepIfRateLimited($response);
-
             $orders = (json_decode($response->getBody()->getContents()))->orders ?? [];
 
             foreach ($orders as $order) {
