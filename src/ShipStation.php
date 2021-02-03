@@ -81,7 +81,7 @@ class ShipStation
 
     public function request($method, $uri = '', array $options = [])
     {
-        $response = parent::request($method, $uri, $options);
+        $response = $this->client->request($method, $uri, $options);
 
         $this->maxAllowedRequests = max((int)$response->getHeader('X-Rate-Limit-Limit')[0], 0);
         $this->secondsUntilReset  = max((int)$response->getHeader('X-Rate-Limit-Reset')[0], 0);
